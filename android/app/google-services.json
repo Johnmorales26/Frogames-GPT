@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "738910884754",
+    "project_id": "frogames-gpt-94f91",
+    "storage_bucket": "frogames-gpt-94f91.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:738910884754:android:c0881dc4a9cd91292f674b",
+        "android_client_info": {
+          "package_name": "com.example.frogames_gpt_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhlibMTy5CbGJeB_VfS_noL-zJpTA1Xw0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
