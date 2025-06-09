@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frogames_gpt_app/app/app.dart';
 import 'package:frogames_gpt_app/core/provider/chat_provider.dart';
 import 'package:frogames_gpt_app/core/provider/theme_provider.dart';
+import 'package:frogames_gpt_app/firebase_options.dart';
 import 'package:provider/provider.dart';
 
 void main() async {

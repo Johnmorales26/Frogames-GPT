@@ -10,6 +10,10 @@ class ButtonsChat extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = Provider.of<ChatProvider>(context);
 
+    if (provider.isLoadResponse) {
+      return CircularProgressIndicator();
+    }
+
     return InkWell(
       onTap: () {
         provider.sendNewMessage();

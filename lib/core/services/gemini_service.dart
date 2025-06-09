@@ -22,4 +22,22 @@ class GeminiService {
       return 'Error: $e';
     }
   }
+
+  Stream<String> sendRequestStreamToModel(String message) async* {
+    final prompt = [Content.text(message)];
+
+    try {
+      final streamResponse = model.generateContentStream(prompt);
+
+      await for (final response in streamResponse) {
+        if (response.text != null) {
+          yield response.text!;
+        } else {
+          yield 'Error: Stream response is null';
+        }
+      }
+    } catch (e) {
+      yield 'Error: $e';
+    }
+  }
 }

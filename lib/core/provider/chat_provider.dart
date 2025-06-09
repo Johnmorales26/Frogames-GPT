@@ -18,6 +18,8 @@ class ChatProvider extends ChangeNotifier {
 
   final TextEditingController messageController = TextEditingController();
 
+  final ScrollController scrollController = ScrollController();
+
   void sendNewMessage() async {
     if (_isSending) return;
 
@@ -52,7 +54,7 @@ class ChatProvider extends ChangeNotifier {
   void _addMessageToUI(ChatMessage message) {
     _messages ??= [];
     _messages!.add(message);
-
+    _scrollToBottom();
     notifyListeners();
   }
 
@@ -60,11 +62,9 @@ class ChatProvider extends ChangeNotifier {
     try {
       _isLoadResponse = true;
 
+      final timestamp = DateTime.now();
       String response = '';
 
-      response = await geminiService.sendRequestToModel(message);
-
-      final timestamp = DateTime.now();
       final responseMessage = ChatMessage(
         id: timestamp.microsecondsSinceEpoch,
         chatId: 0,
@@ -75,7 +75,24 @@ class ChatProvider extends ChangeNotifier {
 
       _updateMessageToUI(responseMessage);
 
-      _isLoadResponse = false;
+      geminiService
+          .sendRequestStreamToModel(message)
+          .listen(
+            (value) {
+              response += value;
+
+              final updateMessage = responseMessage.copyWith(content: response);
+              _updateMessageToUI(updateMessage);
+              _isLoadResponse = false;
+            },
+            onDone: () {
+              _isLoadResponse = false;
+            },
+            onError: (e) {
+              logger.e('Error in Gemini Stream: $e');
+              _isLoadResponse = false;
+            },
+          );
     } catch (e) {
       _isLoadResponse = false;
       logger.e('Error sending message to Gemini: $e');
@@ -89,10 +106,22 @@ class ChatProvider extends ChangeNotifier {
 
     if (index != -1) {
       _messages![index] = responseMessage;
-
+      _scrollToBottom();
       notifyListeners();
     } else {
       _addMessageToUI(responseMessage);
     }
+  }
+
+  void _scrollToBottom() async {
+    Future.delayed(Duration(microseconds: 100), () {
+      if (scrollController.hasClients) {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: Duration(microseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
   }
 }

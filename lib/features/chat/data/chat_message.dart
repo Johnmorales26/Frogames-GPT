@@ -33,3 +33,21 @@ class ChatMessage {
     );
   }
 }
+
+extension ChatMessageCopyWith on ChatMessage {
+  ChatMessage copyWith({
+    int? id,
+    int? chatId,
+    String? role,
+    String? content,
+    DateTime? timestamp,
+  }) {
+    return ChatMessage(
+      id: id ?? this.id,
+      chatId: chatId ?? this.chatId,
+      role: role ?? this.role,
+      content: content ?? this.content,
+      timestamp: timestamp ?? this.timestamp
+    );
+  }
+}
