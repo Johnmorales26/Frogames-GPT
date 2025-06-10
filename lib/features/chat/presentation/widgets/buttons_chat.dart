@@ -16,7 +16,11 @@ class ButtonsChat extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        provider.sendNewMessage();
+        if (provider.activeChat == null) {
+          provider.insertChat();
+        } else {
+          provider.sendNewMessage();
+        }
       },
       child: Container(
         width: 48.0,
